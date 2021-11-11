@@ -1,0 +1,73 @@
+<html>
+    <head>
+        <title>
+            AJAX
+        </title>
+        <meta charset="utf-8">
+        <script>
+            function loadData() {
+                request = new XMLHttpRequest();
+                request.open("GET", "https://api.artic.edu/api/v1/artworks?ids=27992,28560&fields=id,title,image_id", true);
+                
+                request.onreadystatechange = function() {
+                    if (request.readyState == 4 && request.status == 200) {
+                        theData = request.responseText;
+                    }
+                    else if(request.readyState == 4 && request != 200) {
+                    }
+                }
+                request.send();
+            }
+            
+            function loadMessages() {
+                request = new XMLHttpRequest();
+                console.log("1: created request");
+                
+                request.open("GET", "https://api.artic.edu/api/v1/artworks?ids=27992,28560&fields=id,title,image_id", true);
+                console.log("2: open sucsess");
+                
+                request.onreadystatechange = function() {
+                    console.log("3: event fired");
+                    
+                    if (request.readyState == 4 && request.status == 200) {
+                        console.log("5: data is ready");
+                        theData = request.responseText;
+                        data = JSON.parse(theData);
+                        console.log(data);
+                        var returnHTML = "";
+                        returnHTML += "<br>" + data["data"]["0"]["title"];
+                        
+                        document.getElementById("messages").innerHTML = returnHTML;
+                    }
+                    else if (request.readyState == 4 &&  request.status != 200) {
+                        document.getElementById("messages").innerHTML = "Whoops, something went terribly wrong!";
+                    }
+                    else if (request.readyState == 3) {
+                        console.log("6: ready state 3- request received, data being sent");
+                        document.getElementById("messages").innerHTML = "Come back soon!";
+                    }
+                } 
+            
+            request.send();
+            console.log("4 request sent");
+        } 
+        loadData(); 
+        </script>
+        </head>
+        
+        <body onload=loadMessages()>
+            <div id="messages">
+                
+            </div>
+            
+            <p>
+                I used an API from the Art Insitute from Chicago </br>
+                Site: https://api.artic.edu/docs/#quick-start </br>
+                The fields parameter allows selection for specific information. I used a couple of the ones provided, the one currently includes information about a particular art piece, but there are also options to find art in different categories. </br>
+                This API can be helpful for sites with information on specific art pieces and displaying them, also sites with lists of which pieces are at which locations. </br>
+                
+                
+            </p>
+        </body>
+    
+</html>
